@@ -80,7 +80,7 @@ class YardocCommand(sublime_plugin.TextCommand):
 
     def check_doc(self, point):
         current_line = self.read_line(point)
-        params_match = re.search('#\s+@return |#\s+@param |#\s+@author |# ?|#\s+@', current_line)
+        params_match = re.search('##\s+@return |##\s+@param |##\s+@author |## ?|##\s+@', current_line)
         if not params_match:
             return True
         return False
@@ -91,7 +91,7 @@ class YardocCommand(sublime_plugin.TextCommand):
         else:
             username = os.environ['USER']
         author = "${1:[" + username + "]}"
-        return ["#" + self.trailing_spaces, "# @author " + author, "#" + self.trailing_spaces]
+        return ["##" + self.trailing_spaces, "## @author " + author, "##" + self.trailing_spaces]
 
     def line_ending(self):
         ending = "\n"
@@ -110,31 +110,37 @@ class YardocCommand(sublime_plugin.TextCommand):
         # includes all operator methods as per http://stackoverflow.com/a/10542599/120818
         method_name = re.search("def (?P<name>[a-zA-Z_][a-zA-Z_0-9]+[!?=]?|~|\+|\*\*|-|\*|/|%|<<|>>|&|\||\^|<=>|<|<=|=>|>|==|===|!=|=~|!~|!|\[\]=|\[\])", current_line).group("name")
         lines = []
+        lines.append("#----------------------------------------------------------------------------")
         if(self.settings.get('initial_empty_line')):
-            lines.append("#" + self.trailing_spaces)
-        lines.append("# ${1:[%s description]}" % (method_name))
+            lines.append("##" + self.trailing_spaces)
+
+        lines.append("## ${1:[%s description]}" % (method_name))
+        lines.append("##" + self.trailing_spaces)
 
         for param in params:
-            lines.append("# @param %s [${1:type}] ${1:[description]}" % (param))
+            lines.append("## @param %s [${1:type}] ${1:[description]}" % (param))
 
-        lines.append("#" + self.trailing_spaces)
-        lines.append("# @return [${1:type}] ${1:[description]}")
+        lines.append("##" + self.trailing_spaces)
+        lines.append("## @return [${1:type}] ${1:[description]}")
+        lines.append("##" + self.trailing_spaces)
 
         return self.format_lines(indent, lines)
 
     def module_doc(self, current_line, indent):
         lines = []
+        lines.append("#----------------------------------------------------------------------------")
         if(self.settings.get('initial_empty_line')):
-            lines.append("#" + self.trailing_spaces)
-        lines.append("# ${1:[module description]}")
+            lines.append("##" + self.trailing_spaces)
+        lines.append("## ${1:[module description]}")
         lines.extend(self.get_author())
         return self.format_lines(indent, lines)
 
     def class_doc(self, params_match, current_line, indent):
         lines = []
+        lines.append("#----------------------------------------------------------------------------")
         if(self.settings.get('initial_empty_line')):
-            lines.append("#" + self.trailing_spaces)
-        lines.append("# ${1:[class description]}")
+            lines.append("##" + self.trailing_spaces)
+        lines.append("## ${1:[class description]}")
         lines.extend(self.get_author())
         return self.format_lines(indent, lines)
 
@@ -174,5 +180,5 @@ class AddhashtagCommand(YardocCommand):
             return
         # not using the trailing_spaces option here because in most doc writing
         # it will be desired on the next line
-        line = "# "
+        line = "## "
         self.write(self.view, line)

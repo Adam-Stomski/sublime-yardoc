@@ -1,4 +1,6 @@
-## SublimeText package for generating Yardoc
+## Fork of [SublimeText package for generating Yardoc](https://github.com/revathskumar/sublime-yardoc)
+
+Changed to work nicely with my previous doxydoc syntax
 
 ### Installation
 
@@ -16,7 +18,7 @@ Package Control will automatically keep Yardoc up to date with the latest versio
 
 Go to your Sublime Text 2 **Packages** directory and clone the repository using the command below:
 
-    git clone git@github.com:revathskumar/sublime-yardoc.git yardoc
+    git clone git@github.com:Adam-Stomski/sublime-yardoc.git yardoc
 
 Don't forget to keep updating it, though!
 
@@ -32,12 +34,15 @@ end
 results
 
 ```ruby
-#
-# [hello description]
-# @param a [type] [description]
-# @param b [type] [description]
-#
-# @return [type] [description]
+#----------------------------------------------------------------------------
+##
+## [hello description]
+##
+## @param a [type] [description]
+## @param b [type] [description]
+##
+## @return [type] [description]
+##
 def hello a, b
 
 end
@@ -56,11 +61,12 @@ end
 results
 
 ```ruby
-#
-# [class description]
-#
-# @author
-#
+#----------------------------------------------------------------------------
+##
+## [class description]
+##
+## @author
+##
 class Hello
 
 end
